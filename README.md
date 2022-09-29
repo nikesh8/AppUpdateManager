@@ -1,6 +1,6 @@
 # AppUpdateManager
 
-[![CI Status](https://img.shields.io/travis/nikesh8/AppUpdateManager.svg?style=flat)](https://travis-ci.org/nikesh8/AppUpdateManager)
+[![CI Status](https://img.shields.io/travis/nikesh8/AppUpdateManager.svg?style=flat)](https://travis-ci.com/nikesh8/AppUpdateManager)
 [![Version](https://img.shields.io/cocoapods/v/AppUpdateManager.svg?style=flat)](https://cocoapods.org/pods/AppUpdateManager)
 [![License](https://img.shields.io/cocoapods/l/AppUpdateManager.svg?style=flat)](https://cocoapods.org/pods/AppUpdateManager)
 [![Platform](https://img.shields.io/cocoapods/p/AppUpdateManager.svg?style=flat)](https://cocoapods.org/pods/AppUpdateManager)
