@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'AppUpdateManager_Example' do
+  pod 'AppUpdateManager', :path => '../'
+
+  target 'AppUpdateManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
