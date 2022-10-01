@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AppUpdateManager'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'AppUpdate is library for managing app updates and its maintenance.'
 
 # This description is used to generate tags and improve search results.

@@ -53,10 +53,36 @@ class MaintenanceViewController: UIViewController {
         self.updateButton.backgroundColor = UIColor(hex: "#007AFF")
         self.updateButton.layer.cornerRadius = 4.0
         
-        
         let isMaintenanceAvailable = self.updateDataDictionary?.value(forKey: "isMaintenance") as! Bool
+        let iosUpdate = self.updateDataDictionary?.value(forKeyPath: "updateData.isIOSUpdate") as? Bool
         
-        if isMaintenanceAvailable == true {
+        if iosUpdate == true {
+            if let updateData = self.updateDataDictionary?.value(forKey: "updateData") as? NSDictionary {
+                let iosMinBuildVersion = updateData.value(forKey: "iosMinBuildVersion") as? String
+                let iosMinBuildNumber = updateData.value(forKey: "iosBuildNumber") as? String
+                let isForceUpdate = updateData.value(forKey: "isIOSForcedUpdate") as? Bool
+                if iosUpdate == true {
+                    if isForceUpdate == true {
+                        self.dismissButton.isHidden = true
+                    } else {
+                        self.dismissButton.isHidden = false
+                    }
+                    let versionCompare = Bundle.main.releaseVersionNumber!.compare(iosMinBuildVersion!, options: .numeric)
+                    if versionCompare == .orderedSame {
+                        let builNumber = Bundle.main.buildVersionNumber!.compare(iosMinBuildNumber!, options: .numeric)
+                        if builNumber == .orderedAscending {
+                            self.showUpdateView(isForceUpdate!)
+                        } else {
+                            self.dismiss(animated: false, completion: nil)
+                        }
+                    } else if versionCompare == .orderedAscending {
+                        self.showUpdateView(isForceUpdate!)
+                    } else {
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                }
+            }
+        } else if isMaintenanceAvailable == true {
             self.view.backgroundColor = UIColor(hex: "#00000080")
             self.maintenanceView.isHidden = false
             if let maintenanceData = self.updateDataDictionary?.value(forKey: "maintenanceData") as? NSDictionary {
@@ -80,7 +106,7 @@ class MaintenanceViewController: UIViewController {
                 if let textColor = maintenanceData.value(forKey: "textColorCode") as? String {
                     self.maintenanceReasonText.textColor = UIColor(hex: textColor)
                     self.maintenanceTitleText.textColor = UIColor(hex: textColor)
-                    self.maintenanceReasonText.backgroundColor = UIColor.blue
+                    self.appTitleText.textColor = UIColor(hex: textColor)
                 }
                 self.maintenanceTitleText.sizeToFit()
                 self.maintenanceReasonText.sizeToFit()
@@ -92,38 +118,18 @@ class MaintenanceViewController: UIViewController {
                 self.staticMaintenanceText.text = "\(Bundle.main.appName!) app is under maintenance"
                 self.staticMaintenanceText.sizeToFit()
             }
-        } else {
-            if let updateData = self.updateDataDictionary?.value(forKey: "updateData") as? NSDictionary {
-                let iosMinBuildVersion = updateData.value(forKey: "iosMinBuildVersion") as? String
-                let iosMinBuildNumber = updateData.value(forKey: "iosBuildNumber") as? String
-                let isForceUpdate = updateData.value(forKeyPath: "isIOSForcedUpdate") as? Bool
-                if isForceUpdate == true {
-                    self.dismissButton.isHidden = true
-                } else {
-                    self.dismissButton.isHidden = false
-                }
-                let versionCompare = Bundle.main.releaseVersionNumber!.compare(iosMinBuildVersion!, options: .numeric)
-                if versionCompare == .orderedSame {
-                    let builNumber = Bundle.main.buildVersionNumber!.compare(iosMinBuildNumber!, options: .numeric)
-                    if builNumber == .orderedAscending {
-                        self.showUpdateView()
-                    } else {
-                        self.dismiss(animated: false, completion: nil)
-                    }
-                } else if versionCompare == .orderedAscending {
-                    self.showUpdateView()
-                } else {
-                    self.dismiss(animated: false, completion: nil)
-                }
-            }
         }
     }
     
-    func showUpdateView() {
+    func showUpdateView(_ isForceUpdate: Bool) {
         self.view.backgroundColor = UIColor(hex: "#00000080")
         self.logoImageView.image = UIImage.appIcon
-        self.titleText.text = "'\(Bundle.main.appName!)' needs an update"
-        self.subTitleText.text = "An Update to '\(Bundle.main.appName!)' is available. Would you like to update?"
+        self.titleText.text = "\(Bundle.main.appName!) app update available"
+        if isForceUpdate == true {
+            self.subTitleText.text = "An update is available that must be installed."
+        } else {
+            self.subTitleText.text = "An update is available. Would you like to install it?"
+        }
         self.customMaintenanceView.isHidden = true
         self.staticMaintenanceView.isHidden = true
         self.updateView.isHidden = false
