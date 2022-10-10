@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'AppUpdateManager/Classes/**/*'
   s.resources = ['AppUpdateManager/Assets/AppUpdate.storyboard']
+  s.vendored_frameworks = 'AppUpdateManager/Frameworks/FrameworkDemo.xcframework'
 
   # s.resource_bundles = {
   #   'AppUpdateManager' => ['AppUpdateManager/Assets/*.png']
